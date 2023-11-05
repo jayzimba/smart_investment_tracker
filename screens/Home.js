@@ -37,16 +37,12 @@ const Home = ({ navigation }) => {
             style={[styles.square, { backgroundColor: colors.row1 }]}
             onPress={() => navigation.navigate("AddAsset")}
           >
-            <MaterialCommunityIcons
-              name="bank-plus"
-              size={55}
-              color={colors.textColor}
-            />
-            <Text style={styles.squareText}>Add Asset</Text>
+            <FontAwesome name="th-list" size={55} color={colors.textColor} />
+            <Text style={styles.squareText}>Analyse Assets</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.square, { backgroundColor: colors.row2 }]}
-            onPress={() => console.log("clicked")}
+            onPress={() => navigation.navigate("Portfolio")}
           >
             <Entypo name="briefcase" size={55} color={colors.textColor} />
             <Text style={styles.squareText}>Portfolio</Text>

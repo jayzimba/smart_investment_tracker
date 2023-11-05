@@ -7,20 +7,23 @@ import Home from "./screens/Home";
 import AddAsset from "./screens/AddAsset";
 import Profile from "./screens/Profile";
 import Portfolio from "./screens/Portfolio";
+import { PaperProvider } from "react-native-paper";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="AddAsset" component={AddAsset} />
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="Portfolio" component={Portfolio} />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} />
+          <Stack.Screen name="AddAsset" component={AddAsset} />
+          <Stack.Screen name="Profile" component={Profile} />
+          <Stack.Screen name="Portfolio" component={Portfolio} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 }
 
