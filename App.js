@@ -8,6 +8,8 @@ import AddAsset from "./screens/AddAsset";
 import Profile from "./screens/Profile";
 import Portfolio from "./screens/Portfolio";
 import { PaperProvider } from "react-native-paper";
+import Login from "./screens/Login";
+import Signup from "./screens/SignUp";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +19,8 @@ export default function App() {
       <NavigationContainer>
         <StatusBar style="auto" />
         <Stack.Navigator>
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="AddAsset" component={AddAsset} />
           <Stack.Screen name="Profile" component={Profile} />
