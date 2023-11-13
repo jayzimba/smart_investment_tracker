@@ -22,8 +22,8 @@ export default function App() {
         <NavigationContainer>
           <StatusBar style="auto" />
           <Stack.Navigator>
-            {/* <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Signup" component={Signup} /> */}
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Signup" component={Signup} />
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="AddAsset" component={AddAsset} />
             <Stack.Screen name="Profile" component={Profile} />

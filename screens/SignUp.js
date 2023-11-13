@@ -26,6 +26,7 @@ class Signup extends Component {
       email: "",
       contact: "",
       password: "",
+      gender: "",
       loading: false,
     };
   }
@@ -36,12 +37,14 @@ class Signup extends Component {
     var name = this.state.name;
     var email = this.state.email;
     var contact = this.state.contact;
+    var gender = this.state.gender;
     var password = this.state.password;
 
     if (
       name.length == 0 ||
       email.length == 0 ||
       contact.length == 0 ||
+      gender.length == 0 ||
       password.length == 0
     ) {
       alert("Required Field Is Missing!");
@@ -51,6 +54,7 @@ class Signup extends Component {
       formdata.append("name", name);
       formdata.append("email", email);
       formdata.append("contact", contact);
+      formdata.append("gender", gender);
       formdata.append("password", password);
 
       var headers = {
@@ -166,6 +170,32 @@ class Signup extends Component {
                 selectionColor={colors.primary}
                 style={{ marginStart: 10 }}
                 onChangeText={(contact) => this.setState({ contact })}
+              />
+            </View>
+            <View
+              style={{
+                width: "90%",
+                borderWidth: 0.5,
+                padding: 10,
+                borderRadius: 5,
+                marginBottom: 40,
+                flexDirection: "row",
+                alignItems: "center",
+              }}
+            >
+              <MaterialCommunityIcons
+                name="gender-male-female"
+                size={24}
+                color="black"
+              />
+              <TextInput
+                placeholder="gender"
+                value={this.state.gender}
+                maxLength={10}
+                keyboardType="number-pad"
+                selectionColor={colors.primary}
+                style={{ marginStart: 10 }}
+                onChangeText={(gender) => this.setState({ gender })}
               />
             </View>
 

@@ -22,8 +22,12 @@ import {
 import colors from "../assets/Theme.js/colors";
 import { List, Modal, Portal, Button, TextInput } from "react-native-paper";
 import { Alert } from "react-native";
+import { useSelector } from "react-redux";
 
 const Portfolio = () => {
+  const customerData = useSelector((state) => state.customer);
+  const [userID, setUserID] = React.useState(customerData.user_id);
+
   // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [visible, setVisible] = useState(false);
@@ -49,8 +53,51 @@ const Portfolio = () => {
         "Enter Investment Amount for you to invest in " + asset.ticker
       );
     } else {
-      setLoadingInvestment(true);
+      addAsset();
     }
+  };
+
+  const addAsset = async () => {
+    setLoadingInvestment(true);
+
+    var assetTicker = asset.ticker;
+    var amountToInvest = amount;
+    var profit = asset.price;
+    var user = userID;
+
+    var formdata = new FormData();
+    formdata.append("assetTicker", assetTicker);
+    formdata.append("amountToInvest", amountToInvest);
+    formdata.append("profit", profit);
+    formdata.append("user", user);
+
+    var headers = {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    };
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+
+    fetch("https://www.pezabond.com/kapeso/addAsset.php", requestOptions)
+      .then((Response) => Response.json())
+      .then((Response) => {
+        if (Response.success == true) {
+          Alert.alert("Successfull", "you have invested in " + asset.ticker);
+        } else {
+          Alert.alert("FAILED", "We failed to add your asset please try again");
+        }
+      })
+      .catch((error) => {
+        console.error("ERROR:" + error);
+      })
+      .finally(() => {
+        setAmount("");
+        setLoadingInvestment(false);
+      });
   };
 
   const gainers = [
@@ -168,28 +215,28 @@ const Portfolio = () => {
     },
   };
 
-  const apiKey = "17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"; // Replace with your Alpha Vantage API key
-  const url = `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`; // only 25 requests a day because the API is free
+  // const apiKey = "17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"; // Replace with your Alpha Vantage API key
+  // const url = `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`; // only 25 requests a day because the API is free
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url);
-        if (response.status === 200) {
-          // Data is successfully fetched as a JSON object:
-          console.log(response);
-          setApiData(response);
-          const { top_gainers, top_losers, most_actively_traded } = apiData;
-        } else {
-          console.log("Status:", response.status);
-        }
-      } catch (error) {
-        console.log("Error:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(url);
+  //       if (response.status === 200) {
+  //         // Data is successfully fetched as a JSON object:
+  //         console.log(response);
+  //         setApiData(response);
+  //         const { top_gainers, top_losers, most_actively_traded } = apiData;
+  //       } else {
+  //         console.log("Status:", response.status);
+  //       }
+  //     } catch (error) {
+  //       console.log("Error:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
   // useEffect(() => {
   //   fetchData();
   // }, []);
@@ -214,9 +261,11 @@ const Portfolio = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerView}>
-        <Text style={styles.textTop}>Type: {"Share"}</Text>
-        <Text style={styles.textTop}>Amount: ZMW {0}</Text>
-        <Text style={styles.textTop}>Total Returns: ZMW {0}</Text>
+        <Text style={styles.textTop}>
+          the following stock assets are have been classified based on a machine
+          learning algorithm to suggest top gainers, loosers and most traded
+          stocks
+        </Text>
       </View>
       <View style={{ marginTop: 10, marginBottom: 20 }}>
         <Text
@@ -266,11 +315,11 @@ const Portfolio = () => {
             marginBottom: 10,
           }}
         >
-          Top Gainers ( {top_gainers.length} )
+          Top Gainers ( {gainers.length} )
         </Text>
         <FlatList
           horizontal={false}
-          data={top_gainers}
+          data={gainers}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -306,7 +355,7 @@ const Portfolio = () => {
         </Text>
         <FlatList
           horizontal={false}
-          data={top_losers}
+          data={loosers}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
             <TouchableOpacity
@@ -409,8 +458,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   textTop: {
-    color: colors.lightgray,
-    fontSize: 18,
+    color: colors.white,
+    fontSize: 14,
     marginBottom: 10,
   },
   containerView: {

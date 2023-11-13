@@ -12,6 +12,10 @@ import colors from "../assets/Theme.js/colors";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Alert } from "react-native";
 
+import { useDispatch } from "react-redux";
+import { setCustomer } from "../Redux/customerSlice";
+import { connect } from "react-redux";
+
 class Login extends Component {
   constructor(props) {
     super(props);
@@ -19,8 +23,15 @@ class Login extends Component {
       email: "",
       password: "",
       loading: false,
+      customer: [],
     };
   }
+
+  setCustomerData = (customerData) => {
+    const { dispatch } = this.props;
+    // Dispatch the action to set 'customer' data in Redux
+    dispatch(setCustomer(customerData));
+  };
 
   LogDataInDB = () => {
     this.setState({ loading: true });
@@ -49,11 +60,14 @@ class Login extends Component {
       fetch("https://www.pezabond.com/kapeso/login.php", requestOptions)
         .then((Response) => Response.json())
         .then((Response) => {
-          if (Response[0].Message == "log in successfuly!") {
+          if (Response.success) {
             this.props.navigation.navigate("Home");
-          } else if (Response[0].Message == "log in Failed!") {
+            this.setState({ customer: Response.customerDetails });
+            this.setCustomerData(Response.customerDetails);
+          } else if (!Response.success) {
             alert("Login Failed - Try Again");
           }
+          console.log(this.state.customer);
         })
         .catch((error) => {
           console.error("ERROR:" + error);
@@ -125,6 +139,7 @@ class Login extends Component {
               color="black"
             />
             <TextInput
+              secureTextEntry={true}
               placeholder="Password"
               selectionColor={colors.primary}
               style={{ marginStart: 10 }}
@@ -170,7 +185,7 @@ class Login extends Component {
   }
 }
 
-export default Login;
+export default connect()(Login);
 
 const styles = StyleSheet.create({
   container: {

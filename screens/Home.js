@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Dimensions } from "react-native";
 import colors from "../assets/Theme.js/colors";
 import {
@@ -12,10 +12,42 @@ import {
   MaterialIcons,
   Entypo,
 } from "@expo/vector-icons";
+import { useSelector } from "react-redux";
+
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
 
 const Home = ({ navigation }) => {
+  const customerData = useSelector((state) => state.customer);
+  const [userID, setUserID] = useState(customerData.user_id);
+  const [investment, setInvestment] = useState([]);
+
+  useEffect(() => {
+    fetchInvestment();
+    fetchInvestment();
+    fetchInvestment();
+  }, []);
+
+  const fetchInvestment = async () => {
+    var formdata = new FormData();
+
+    formdata.append("userID", userID);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+    // Fetch data from the API
+    fetch("https://www.pezabond.com/kapeso/fetchInvestment.php", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        setInvestment(result);
+        console.log(investment);
+      })
+      .catch((error) => console.log("error", error));
+  };
+
   return (
     <View style={styles.container}>
       <View
@@ -25,10 +57,21 @@ const Home = ({ navigation }) => {
       </View>
 
       <View style={styles.containerView}>
-        <Text style={styles.textTop}>Total Investment: {0}</Text>
-        <Text style={styles.textTop}>Net Worth: ZMW {0}</Text>
-        <Text style={styles.textTop}>Profit: ZMW {0}</Text>
-        <Text style={styles.textTop}>Loss: ZMW {0}</Text>
+        <Text style={styles.textTop}>
+          Total Assets: {investment.total_records} Assets
+        </Text>
+        <Text style={styles.textTop}>
+          Total Investment: ZMW {investment.total_investment}
+        </Text>
+
+        <Text style={styles.textTop}>
+          Profit: ZMW {investment.total_profit}
+        </Text>
+        <Text style={styles.textTop}>
+          ACCOUNTBALANCE: ZMW{" "}
+          {parseFloat(investment.total_profit) +
+            parseFloat(investment.total_investment)}
+        </Text>
       </View>
 
       <View style={styles.mainContainer}>
@@ -51,7 +94,7 @@ const Home = ({ navigation }) => {
         <View style={styles.row}>
           <TouchableOpacity
             style={[styles.square, { backgroundColor: colors.row3 }]}
-            onPress={() => console.log("clicked")}
+            onPress={() => navigation.navigate("Profile")}
           >
             <Ionicons name="person" size={55} color={colors.textColor} />
             <Text style={styles.squareText}>Profile</Text>
