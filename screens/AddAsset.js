@@ -206,7 +206,7 @@ export default AddAsset;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.primary,
     paddingHorizontal: 7,
   },
   assetHolder: {

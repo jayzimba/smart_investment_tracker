@@ -10,24 +10,28 @@ import Portfolio from "./screens/Portfolio";
 import { PaperProvider } from "react-native-paper";
 import Login from "./screens/Login";
 import Signup from "./screens/SignUp";
+import { Provider } from "react-redux";
+import store from "./Redux/store";
 
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
-    <PaperProvider>
-      <NavigationContainer>
-        <StatusBar style="auto" />
-        <Stack.Navigator>
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Signup" component={Signup} />
-          <Stack.Screen name="Home" component={Home} />
-          <Stack.Screen name="AddAsset" component={AddAsset} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Portfolio" component={Portfolio} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <Provider store={store}>
+      <PaperProvider>
+        <NavigationContainer>
+          <StatusBar style="auto" />
+          <Stack.Navigator>
+            {/* <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Signup" component={Signup} /> */}
+            <Stack.Screen name="Home" component={Home} />
+            <Stack.Screen name="AddAsset" component={AddAsset} />
+            <Stack.Screen name="Profile" component={Profile} />
+            <Stack.Screen name="Portfolio" component={Portfolio} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </Provider>
   );
 }
 

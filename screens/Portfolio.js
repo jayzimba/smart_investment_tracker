@@ -6,6 +6,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import React, { useState, useEffect } from "react";
@@ -20,14 +21,37 @@ import {
 } from "react-native-chart-kit";
 import colors from "../assets/Theme.js/colors";
 import { List, Modal, Portal, Button, TextInput } from "react-native-paper";
+import { Alert } from "react-native";
 
 const Portfolio = () => {
   // const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [visible, setVisible] = React.useState(false);
+  const [visible, setVisible] = useState(false);
+  const [loadingInvest, setLoadingInvestment] = useState(false);
+  const [amount, setAmount] = useState("");
+  const [asset, setAsset] = useState([]);
 
-  const showModal = () => setVisible(true);
+  // api data will be assigned to this data object
+  const [apiData, setApiData] = useState(null);
+
+  const showModal = (item) => {
+    setVisible(true);
+    console.log(item);
+    setAsset(item);
+  };
+
   const hideModal = () => setVisible(false);
+
+  const storeInvestment = () => {
+    if (amount == 0) {
+      Alert.alert(
+        "Invalid Amount",
+        "Enter Investment Amount for you to invest in " + asset.ticker
+      );
+    } else {
+      setLoadingInvestment(true);
+    }
+  };
 
   const gainers = [
     {
@@ -144,27 +168,49 @@ const Portfolio = () => {
     },
   };
 
-  // const apiKey = "17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"; // Replace with your Alpha Vantage API key
-  // const url = `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`; // only 25 requests a day because the API is free
+  const apiKey = "17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"; // Replace with your Alpha Vantage API key
+  const url = `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`; // only 25 requests a day because the API is free
 
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(url);
+        if (response.status === 200) {
+          // Data is successfully fetched as a JSON object:
+          console.log(response);
+          setApiData(response);
+          const { top_gainers, top_losers, most_actively_traded } = apiData;
+        } else {
+          console.log("Status:", response.status);
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
   // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(url);
-  //       if (response.status === 200) {
-  //         // Data is successfully fetched as a JSON object:
-  //         console.log(response.data);
-  //         setData(response.data);
-  //       } else {
-  //         console.log("Status:", response.status);
-  //       }
-  //     } catch (error) {
-  //       console.log("Error:", error);
-  //     }
-  //   };
-
   //   fetchData();
   // }, []);
+
+  // const fetchData = async () => {
+  //   var requestOptions = {
+  //     method: "GET",
+  //     redirect: "follow",
+  //   };
+
+  //   fetch(
+  //     "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7",
+  //     requestOptions
+  //   )
+  //     .then((response) => response.json())
+  //     .then((result) => {
+  //       setApiData(result);
+  //     })
+  //     .catch((error) => console.log("error", error));
+  // };
+
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerView}>
@@ -189,7 +235,10 @@ const Portfolio = () => {
             data={most_actively_traded}
             keyExtractor={(item, index) => index.toString()}
             renderItem={({ item }) => (
-              <TouchableOpacity style={styles.assetHolder} onPress={showModal}>
+              <TouchableOpacity
+                style={styles.assetHolder}
+                onPress={() => showModal(item)}
+              >
                 <View>
                   <Text style={styles.symbol}>{item.ticker}</Text>
                   <Text style={styles.identifier}>{item.price}</Text>
@@ -217,14 +266,17 @@ const Portfolio = () => {
             marginBottom: 10,
           }}
         >
-          Top Gainers ( {gainers.length} )
+          Top Gainers ( {top_gainers.length} )
         </Text>
         <FlatList
           horizontal={false}
-          data={gainers}
+          data={top_gainers}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.assetHolder} onPress={showModal}>
+            <TouchableOpacity
+              style={styles.assetHolder}
+              onPress={() => showModal(item)}
+            >
               <View>
                 <Text style={styles.symbol}>{item.ticker}</Text>
                 <Text style={styles.identifier}>{item.price}</Text>
@@ -254,10 +306,13 @@ const Portfolio = () => {
         </Text>
         <FlatList
           horizontal={false}
-          data={loosers}
+          data={top_losers}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity style={styles.assetHolder} onPress={showModal}>
+            <TouchableOpacity
+              style={styles.assetHolder}
+              onPress={() => showModal(item)}
+            >
               <View>
                 <Text style={styles.symbol}>{item.ticker}</Text>
                 <Text style={styles.identifier}>{item.price}</Text>
@@ -281,6 +336,23 @@ const Portfolio = () => {
           onDismiss={hideModal}
           contentContainerStyle={containerStyle}
         >
+          {asset.change_amount < 0 ? (
+            <Text
+              style={{ color: colors.danger, fontSize: 18, fontWeight: "bold" }}
+            >
+              likely to loose {asset.change_percentage}
+            </Text>
+          ) : (
+            <Text
+              style={{
+                color: colors.success,
+                fontSize: 18,
+                fontWeight: "bold",
+              }}
+            >
+              like to profit upto {asset.change_percentage}
+            </Text>
+          )}
           <Text style={{ marginBottom: 20, fontSize: 28, fontWeight: "800" }}>
             Enter the amount you want to invest
           </Text>
@@ -294,9 +366,11 @@ const Portfolio = () => {
               ZMW{" "}
             </Text>
             <TextInput
+              value={amount}
               placeholder="Enter Investment Amount"
               fontSize={22}
               keyboardType="numeric"
+              onChangeText={(text) => setAmount(text)}
             />
           </View>
 
@@ -310,11 +384,16 @@ const Portfolio = () => {
               justifyContent: "center",
               alignItems: "center",
             }}
+            onPress={() => storeInvestment()}
           >
             <Text style={{ color: "white", fontWeight: "500", fontSize: 18 }}>
               Invest
             </Text>
           </TouchableOpacity>
+
+          <View>
+            {loadingInvest && <ActivityIndicator color={colors.info} />}
+          </View>
         </Modal>
       </Portal>
     </ScrollView>

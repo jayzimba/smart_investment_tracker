@@ -58,7 +58,7 @@ const Home = ({ navigation }) => {
           </TouchableOpacity>
           <TouchableOpacity
             style={[styles.square, { backgroundColor: colors.green }]}
-            onPress={() => console.log("clicked")}
+            onPress={() => navigation.replace("Login")}
           >
             <Entypo name="log-out" size={55} color={colors.textColor} />
             <Text style={styles.squareText}>Signout</Text>
