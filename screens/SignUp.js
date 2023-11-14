@@ -192,7 +192,7 @@ class Signup extends Component {
                 placeholder="gender"
                 value={this.state.gender}
                 maxLength={10}
-                keyboardType="number-pad"
+                keyboardType="default"
                 selectionColor={colors.primary}
                 style={{ marginStart: 10 }}
                 onChangeText={(gender) => this.setState({ gender })}
