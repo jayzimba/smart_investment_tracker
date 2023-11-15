@@ -34,7 +34,12 @@ const Portfolio = () => {
   const [loadingInvest, setLoadingInvestment] = useState(false);
   const [amount, setAmount] = useState("");
   const [asset, setAsset] = useState([]);
-
+  const [API, setAPI] = useState(
+    "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"
+  );
+  // const [gainers, setGainers] = useState([]);
+  // const [loosers, setLoosers] = useState([]);
+  // const [most_actively_traded, setMost_actively_traded] = useState([]);
   // api data will be assigned to this data object
   const [apiData, setApiData] = useState(null);
 
@@ -215,49 +220,33 @@ const Portfolio = () => {
     },
   };
 
-  // const apiKey = "17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"; // Replace with your Alpha Vantage API key
-  // const url = `https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=${apiKey}`; // only 25 requests a day because the API is free
+  useEffect(() => {
+    // fetchData();
+    // fetchData();
+  }, []);
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(url);
-  //       if (response.status === 200) {
-  //         // Data is successfully fetched as a JSON object:
-  //         console.log(response);
-  //         setApiData(response);
-  //         const { top_gainers, top_losers, most_actively_traded } = apiData;
-  //       } else {
-  //         console.log("Status:", response.status);
-  //       }
-  //     } catch (error) {
-  //       console.log("Error:", error);
-  //     }
-  //   };
+  const fetchData = async () => {
+    var formdata = new FormData();
 
-  //   fetchData();
-  // }, []);
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+    var requestOptions = {
+      method: "GET",
+      redirect: "follow",
+    };
 
-  // const fetchData = async () => {
-  //   var requestOptions = {
-  //     method: "GET",
-  //     redirect: "follow",
-  //   };
+    fetch(
+      "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then((result) => {
+        setGainers(result.top_gainers);
+        setLoosers(result.top_losers);
+        setMost_actively_traded(result.most_actively_traded);
+      })
+      .catch((error) => console.log("error", error));
+  };
 
-  //   fetch(
-  //     "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7",
-  //     requestOptions
-  //   )
-  //     .then((response) => response.json())
-  //     .then((result) => {
-  //       setApiData(result);
-  //     })
-  //     .catch((error) => console.log("error", error));
-  // };
-
+ 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerView}>

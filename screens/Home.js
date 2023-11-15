@@ -13,6 +13,7 @@ import {
   Entypo,
 } from "@expo/vector-icons";
 import { useSelector } from "react-redux";
+import { Alert } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 const screenHeight = Dimensions.get("window").height;
@@ -43,7 +44,32 @@ const Home = ({ navigation }) => {
       .then((response) => response.json())
       .then((result) => {
         setInvestment(result);
+
         console.log(investment);
+      })
+      .catch((error) => console.log("error", error));
+  };
+  const deleteAssets = async () => {
+    var formdata = new FormData();
+
+    formdata.append("userID", userID);
+
+    var requestOptions = {
+      method: "POST",
+      body: formdata,
+      redirect: "follow",
+    };
+    // Fetch data from the API
+    fetch("https://www.pezabond.com/kapeso/removeAssets.php", requestOptions)
+      .then((response) => response.json())
+      .then((result) => {
+        if (result.success == true) {
+          Alert.alert("DELETED", " All assets where deleted");
+          fetchInvestment();
+        } else if (result.success == false) {
+          Alert.alert("DELETION FAILED", "No Data is deleted for this user");
+          fetchInvestment();
+        }
       })
       .catch((error) => console.log("error", error));
   };
@@ -54,9 +80,15 @@ const Home = ({ navigation }) => {
         style={{ alignItems: "center", width: screenWidth, marginBottom: 20 }}
       >
         <Text style={styles.heading}>Investment Tracker</Text>
+        <Text style={[styles.heading, { fontSize: 14 }]}>
+          Click this section below to remove all assets
+        </Text>
       </View>
 
-      <View style={styles.containerView}>
+      <TouchableOpacity
+        style={styles.containerView}
+        onPress={() => deleteAssets()}
+      >
         <Text style={styles.textTop}>
           Total Assets: {investment.total_records} Assets
         </Text>
@@ -72,7 +104,7 @@ const Home = ({ navigation }) => {
           {parseFloat(investment.total_profit) +
             parseFloat(investment.total_investment)}
         </Text>
-      </View>
+      </TouchableOpacity>
 
       <View style={styles.mainContainer}>
         <View style={styles.row}>
