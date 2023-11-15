@@ -37,10 +37,9 @@ const Portfolio = () => {
   const [API, setAPI] = useState(
     "https://www.alphavantage.co/query?function=TOP_GAINERS_LOSERS&apikey=17e5e451bdmshd00d8606aa55f97p1d410ajsn73edc050cfe7"
   );
-  // const [gainers, setGainers] = useState([]);
-  // const [loosers, setLoosers] = useState([]);
-  // const [most_actively_traded, setMost_actively_traded] = useState([]);
-  // api data will be assigned to this data object
+  const [gainers, setGainers] = useState([]);
+  const [loosers, setLoosers] = useState([]);
+  const [most_actively_traded, setMost_actively_traded] = useState([]);
   const [apiData, setApiData] = useState(null);
 
   const showModal = (item) => {
@@ -105,105 +104,105 @@ const Portfolio = () => {
       });
   };
 
-  const gainers = [
-    {
-      ticker: "SHAP+",
-      price: "0.025",
-      change_amount: "0.01",
-      change_percentage: "66.6667%",
-      volume: "189756",
-    },
-    {
-      ticker: "CTOS+",
-      price: "0.0263",
-      change_amount: "0.0103",
-      change_percentage: "64.375%",
-      volume: "4950",
-    },
-    {
-      ticker: "TGAAW",
-      price: "0.05",
-      change_amount: "0.0195",
-      change_percentage: "63.9344%",
-      volume: "500",
-    },
-  ];
+  // const gainers = [
+  //   {
+  //     ticker: "SHAP+",
+  //     price: "0.025",
+  //     change_amount: "0.01",
+  //     change_percentage: "66.6667%",
+  //     volume: "189756",
+  //   },
+  //   {
+  //     ticker: "CTOS+",
+  //     price: "0.0263",
+  //     change_amount: "0.0103",
+  //     change_percentage: "64.375%",
+  //     volume: "4950",
+  //   },
+  //   {
+  //     ticker: "TGAAW",
+  //     price: "0.05",
+  //     change_amount: "0.0195",
+  //     change_percentage: "63.9344%",
+  //     volume: "500",
+  //   },
+  // ];
 
-  const loosers = [
-    {
-      ticker: "GMBLW",
-      price: "0.0121",
-      change_amount: "-0.0174",
-      change_percentage: "-58.9831%",
-      volume: "800",
-    },
-    {
-      ticker: "AGBAW",
-      price: "0.0112",
-      change_amount: "-0.0136",
-      change_percentage: "-54.8387%",
-      volume: "13479",
-    },
-    {
-      ticker: "ALTUW",
-      price: "0.0251",
-      change_amount: "-0.0249",
-      change_percentage: "-49.8%",
-      volume: "53400",
-    },
-    {
-      ticker: "HHLA+",
-      price: "0.025",
-      change_amount: "-0.015",
-      change_percentage: "-37.5%",
-      volume: "1084",
-    },
-  ];
+  // const loosers = [
+  //   {
+  //     ticker: "GMBLW",
+  //     price: "0.0121",
+  //     change_amount: "-0.0174",
+  //     change_percentage: "-58.9831%",
+  //     volume: "800",
+  //   },
+  //   {
+  //     ticker: "AGBAW",
+  //     price: "0.0112",
+  //     change_amount: "-0.0136",
+  //     change_percentage: "-54.8387%",
+  //     volume: "13479",
+  //   },
+  //   {
+  //     ticker: "ALTUW",
+  //     price: "0.0251",
+  //     change_amount: "-0.0249",
+  //     change_percentage: "-49.8%",
+  //     volume: "53400",
+  //   },
+  //   {
+  //     ticker: "HHLA+",
+  //     price: "0.025",
+  //     change_amount: "-0.015",
+  //     change_percentage: "-37.5%",
+  //     volume: "1084",
+  //   },
+  // ];
 
-  const most_actively_traded = [
-    {
-      ticker: "SQQQ",
-      price: "18.82",
-      change_amount: "-0.68",
-      change_percentage: "-3.4872%",
-      volume: "141489404",
-    },
-    {
-      ticker: "TSLA",
-      price: "219.96",
-      change_amount: "1.45",
-      change_percentage: "0.6636%",
-      volume: "118579793",
-    },
-    {
-      ticker: "TQQQ",
-      price: "37.58",
-      change_amount: "1.28",
-      change_percentage: "3.5262%",
-      volume: "113598709",
-    },
-    {
-      ticker: "PLTR",
-      price: "18.895",
-      change_amount: "0.925",
-      change_percentage: "5.1475%",
-      volume: "107445205",
-    },
-    {
-      ticker: "SPY",
-      price: "434.68",
-      change_amount: "3.92",
-      change_percentage: "0.91%",
-      volume: "98428631",
-    },
-    {
-      ticker: "NVOS",
-      price: "0.298",
-      change_amount: "0.0395",
-      change_percentage: "15.2805%",
-      volume: "93370309",
-    },
-  ];
+  // const most_actively_traded = [
+  //   {
+  //     ticker: "SQQQ",
+  //     price: "18.82",
+  //     change_amount: "-0.68",
+  //     change_percentage: "-3.4872%",
+  //     volume: "141489404",
+  //   },
+  //   {
+  //     ticker: "TSLA",
+  //     price: "219.96",
+  //     change_amount: "1.45",
+  //     change_percentage: "0.6636%",
+  //     volume: "118579793",
+  //   },
+  //   {
+  //     ticker: "TQQQ",
+  //     price: "37.58",
+  //     change_amount: "1.28",
+  //     change_percentage: "3.5262%",
+  //     volume: "113598709",
+  //   },
+  //   {
+  //     ticker: "PLTR",
+  //     price: "18.895",
+  //     change_amount: "0.925",
+  //     change_percentage: "5.1475%",
+  //     volume: "107445205",
+  //   },
+  //   {
+  //     ticker: "SPY",
+  //     price: "434.68",
+  //     change_amount: "3.92",
+  //     change_percentage: "0.91%",
+  //     volume: "98428631",
+  //   },
+  //   {
+  //     ticker: "NVOS",
+  //     price: "0.298",
+  //     change_amount: "0.0395",
+  //     change_percentage: "15.2805%",
+  //     volume: "93370309",
+  //   },
+  // ];
 
   const containerStyle = {
     backgroundColor: "white",
@@ -221,8 +220,8 @@ const Portfolio = () => {
   };
 
   useEffect(() => {
-    // fetchData();
-    // fetchData();
+    fetchData();
+    fetchData();
   }, []);
 
   const fetchData = async () => {
@@ -246,7 +245,6 @@ const Portfolio = () => {
       .catch((error) => console.log("error", error));
   };
 
- 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.containerView}>
